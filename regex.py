@@ -23,47 +23,83 @@ def find_word(string_list):
     """ Return a list of words that contain three digit numbers in the middle. """
 
     # initialize an empty list
-
+    lst = []
     # define the regular expression
-
+    for line in string_list:
     # loop through each line of the string list 
-
     # find all the words that match the regular expression in each line
-    
+        res = re.findall("[a-zA-Z]+\d\d\d[a-zA-Z]+", line)
     # loop through the found words and add the words to your empty list 
-
-    #return the list of all words that start with the letter B, E, or T
-    pass
+        for words in res:
+            lst.append(words)
+    #return the list of all words
+    return lst
 
 
 def find_days(string_list):
     """ Return a list of days from the list of strings the dates format in the text are MM/DD/YYYY. """  
 
     # initialize an empty list
-
+    lst = []
     # define the regular expression
-
-    # loop through each line of the string list
+    for line in string_list:
+    # loop through each line of the string list 
+    # find all the words that match the regular expression in each line
+        res = re.findall("\d*[/]\d*[/]\d\d\d\d", line)
     
     # find all the dates that match the regular expression in each line
     
     # loop through the found dates and only add the days to your empty list 
     
     #return the list of days
-    pass
+        for words in res:
+            first = 0
+            end = 0
+            indx = 0
+            count = 0
+            for i in words:
+                if i == '/' and count == 1:
+                    end = indx
+                    break
+                elif i == '/' and count == 0:
+                    count += 1
+                elif count == 1 and i != '/' and first == 0:
+                    first = indx
+                elif count == 1 and i != '/' and first != 0:
+                    indx += 1
+                    continue
+                elif count == 1 and i == '/': 
+                    end = indx
+                    count += 1
+                elif count >= 2:
+                    break
+                indx += 1
+                    
+            lst.append(words[first:end])
+    #return the list of all words 
+    return lst
 
 def find_domains(string_list):
     """ Return a list of web address domains from the list of strings the domains of a wbsite are after www. """
 
-    # initialize an empty list
-
+    lst = []
     # define the regular expression
-
-    # loop through each line of the string list
-
-    # find all the domains that match the regular expression in each line
+    for line in string_list:
+    # loop through each line of the string list 
+    # find all the words that match the regular expression in each line
+        res = re.findall("[http]+[s]?[://]\S+", line)
 
     # loop through the found domains
+        for words in res: 
+            domain = words.split('//')
+            ret_domain = domain[1]
+            if ret_domain[0:4] == 'www.':
+                ret_domain = ret_domain[4:]
+            ret_domain = ret_domain.rstrip('\n')
+            ret_domain = ret_domain[:-1]
+            
+            lst.append(ret_domain)
+
 
     # get the domain name by splitting the (//) after the https or http to get the website name
     # then strip the www. to get only the domain name
@@ -71,7 +107,7 @@ def find_domains(string_list):
     # add the domains to your empty list
     
     #return the list of domains
-    pass
+    return lst
 
 class TestAllMethods(unittest.TestCase):
 
